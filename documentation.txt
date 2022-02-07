@@ -8,6 +8,7 @@ Download the provided code from Github, use npm install to install all the depen
 Tutorial:
 Input some location you want find forecasts about, up to 5 cards will appear with the location.
 Clicking on the locations card will reveal more data about the current and the next 7 days weather info.
+Run the back-end server in back directory with nodemon start command in terminal, configure it to run port 3000.
 Decision log:
 001. 
 React was used for the UI off the app, it is nice divide the app into smaller, reusable components.
