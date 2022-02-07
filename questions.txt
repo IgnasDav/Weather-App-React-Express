@@ -1,4 +1,4 @@
 Questions I got during the implementation off the task
 Should search values persist after reloading the page?
-Do we want only successful search text sent to backend for every search query?
+Do we want only successful search text sent to backend for every search query ?
 Do we want to post whole object of day forecasts or only the current days forecast? 
