@@ -4,11 +4,11 @@ Cards with data of forecast and location appear after search, on card click open
 which shows current weather and the weather for the next 7 days, user actions are sent back/logged to server.
 Simple style allows users to easily navigate through the app and the information is easily accessible.
 Installation instructions:
-Download the provided code from Github, use npm install to install all the dependencies.
+Download the provided code from Github, use npm install to install all the dependencies in the front directory and back directory, use npm install two times in these two different categories.
 Tutorial:
 Input some location you want find forecasts about, up to 5 cards will appear with the location.
 Clicking on the locations card will reveal more data about the current and the next 7 days weather info.
-Run the back-end server in back directory with nodemon start command in terminal, configure it to run port 3000.
+Run the back-end server in back directory, configure it to run port 3000, start the server with nodemon start command in terminal.
 Decision log:
 001. 
 React was used for the UI off the app, it is nice divide the app into smaller, reusable components.
