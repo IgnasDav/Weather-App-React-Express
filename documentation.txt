@@ -63,5 +63,7 @@ https://learning.postman.com/docs/getting-started/introduction/ - Postman docume
 015.
 For getting the data off the weather forecasts, Foreca weather API was used.
 https://rapidapi.com/foreca-ltd-foreca-ltd-default/api/foreca-weather/ - Foreeca weather documentation
-
-
+016.
+Styled-components were used for styling as it makes adding styles more intuative, simpler as it uses JavaScript syntax and we can use props inside the styles,
+but it has downsides, styles are slower because the styles are loaded from JavaScript, and browser can't store the styles file in the cache, so the user has to download more memory from the server
+https://styled-components.com/docs - Styled-components documentation
