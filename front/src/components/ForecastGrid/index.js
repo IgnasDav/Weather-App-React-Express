@@ -1,48 +1,69 @@
-import { useCallback, useContext, useEffect, useState } from "react";
-import apiSettings from "../../API";
-import ForecastContext from "../../context/ForecastsContext";
-import SearchContext from "../../context/SearchContext";
 import _ from "lodash";
+import { useDispatch, useSelector } from "react-redux";
+import { useCallback, useEffect, useState } from "react";
+import content from "../../content";
 //Styles
 import { Wrapper, Content } from "./ForecastGrid.styles";
 //Component
 import Card from "../Card";
 import { Spinner } from "../Spinner/Spinner.styles";
+import apiSettings from "../../API";
 
 const ForecastGrid = () => {
-  const { forecasts, setForecasts, loading, setLoading, error, setError } =
-    useContext(ForecastContext);
-  const [postError, setPostError] = useState(null);
-  const { search, searchError, inputEl } = useContext(SearchContext);
-  const getForecasts = useCallback(async () => {
-    try {
-      setLoading(true);
-      const response = await apiSettings.fetchForecast(search);
-      response.forecasts.locations.length = 5;
-      setForecasts(response.forecasts.locations);
-    } catch (e) {
-      setError(e);
+  const [postUserDataError, setPostUserDataError] = useState(null);
+  const error = useSelector((state) =>
+    content.selectors.selectForecastsError(state)
+  );
+  const loading = useSelector((state) =>
+    content.selectors.selectForecastsLoading(state)
+  );
+  const forecasts = useSelector((state) =>
+    content.selectors.selectForecasts(state)
+  );
+  //Thought that this would memoize the forecasts, and would prevent re-renders of the component
+  //My idea was that javascript stores arrays and  objects as a reference not as a value into the memory,
+  //so react sees that forecasts are two different references and re-renders the component,
+  //memoization should prevent these re-renders because the values of array doesn't change
+  //on re-render the dipatch fires so we get the loading screen, forecasts unmount and then after loading finishes, forecasts mount again
+  //To fix this issue we check whether the forecast state and the response we get from api call are the same
+  // const memoizedForecasts = useSelector((state) =>
+  //   content.selectors.selectMemoizedForecasts(state)
+  // );
+
+  const dispatch = useDispatch();
+  const search = useSelector((state) => content.selectors.selectSearch(state));
+  useEffect(() => {
+    if (search) {
+      const timeout = setTimeout(async () => {
+        const response = await apiSettings.fetchForecast(search);
+        response.forecasts.locations.length = 5;
+        if (!_.isEqual(forecasts, response.forecasts.locations)) {
+          dispatch(content.actions.setForecasts(search));
+        }
+      }, 1000);
+      return () => clearTimeout(timeout);
     }
-    setLoading(false);
-  }, [setLoading, setForecasts, setError, search]);
+  }, [dispatch, search, forecasts]);
+  useEffect(() => {
+    const timeout = setTimeout(() => {
+      if (!search) {
+        dispatch(content.actions.deleteForecasts());
+      }
+    }, 1000);
+    return () => clearTimeout(timeout);
+  }, [search, dispatch]);
+
   const postSearchValue = useCallback(async () => {
     try {
-      const response = await apiSettings.postUserSearchParam(
-        JSON.stringify({ search })
-      );
-      return response.json();
-    } catch (e) {
-      setPostError(e);
+      const response = await apiSettings.postUserSearchParam(search);
+      return await response;
+    } catch (error) {
+      setPostUserDataError(error.message);
     }
-  }, [setPostError, search]);
+  }, [search]);
+
   useEffect(() => {
     const timeout = setTimeout(async () => {
-      //Logic to check if weather response payload is the same
-      //And if it is the same do not log the seach query to server
-      //It gives falsy data to us, because on re-render of the page
-      //It sends the same value to server so we get two instances of
-      //the same searrch query
-      //It has a flaw, because we get an extra fetch of payload from the server
       const response = await apiSettings.fetchForecast(search);
       response.forecasts.locations.length = 5;
       if (!_.isEqual(forecasts, response.forecasts.locations)) {
@@ -50,30 +71,8 @@ const ForecastGrid = () => {
       }
     }, 1000);
     return () => clearTimeout(timeout);
-  }, [postSearchValue, search, inputEl, forecasts]);
-  useEffect(() => {
-    if (search && !searchError) {
-      const timeout = setTimeout(async () => {
-        //Duplicate code in two instances, going against DRY principles
-        //but couldn't think off a better solution
-        const response = await apiSettings.fetchForecast(search);
-        response.forecasts.locations.length = 5;
-        if (!_.isEqual(forecasts, response.forecasts.locations)) {
-          getForecasts();
-        }
-      }, 1000);
+  }, [postSearchValue, forecasts, search]);
 
-      return () => clearTimeout(timeout);
-    }
-  }, [getForecasts, search, searchError, forecasts]);
-  useEffect(() => {
-    if (forecasts.length || !search) setError(null);
-  }, [setError, forecasts, search]);
-  useEffect(() => {
-    if (!search) {
-      setForecasts([]);
-    }
-  }, [search, setForecasts]);
   return (
     <Wrapper>
       <Content>

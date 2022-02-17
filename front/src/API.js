@@ -19,7 +19,7 @@ const apiSettings = {
       headers: {
         "content-type": "application/json",
       },
-      body: search,
+      body: JSON.stringify({ search }),
     });
     return await response.json();
   },

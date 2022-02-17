@@ -74,8 +74,8 @@ app.get("/get7DayForecast/:id", async (req, res) => {
         },
       }
     );
-    let forecast = await response.json();
-    res.send({ success: true, forecast });
+    let data = await response.json();
+    res.send({ success: true, data });
     return;
   } catch (e) {
     res.status(500).send({ success: false, error: "Internal Server Error" });

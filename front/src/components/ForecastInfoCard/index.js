@@ -1,8 +1,8 @@
-import { useContext } from "react";
+import content from "../../content";
+import { useSelector } from "react-redux";
 //Components
 import SmallerCard from "../SmallerCard";
 //Styles
-import SingleCityForecastContext from "../../context/SingleCityForecastContext";
 import { Wrapper, CurrentInfo, Forecast } from "./ForecastInfoCard.styles";
 
 const ForecastInfoCard = ({
@@ -15,7 +15,9 @@ const ForecastInfoCard = ({
   country,
   symbolPhrase,
 }) => {
-  const { forecast } = useContext(SingleCityForecastContext);
+  const forecast = useSelector((state) =>
+    content.selectors.selectSingleForecast(state)
+  );
   return (
     <Wrapper>
       <h1>Current Days Weather</h1>

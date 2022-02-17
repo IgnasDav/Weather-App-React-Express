@@ -8,7 +8,7 @@ const Card = ({ id, country, city, adminArea, lon, lat, timezone }) => {
       <Link to={`forecast/${id}`}>
         <Wrapper>
           <Content>
-            {country && <p> Country: {country}</p>}
+            {country && <p>Country: {country}</p>}
             {city && <p>City: {city}</p>}
             {timezone && <p>Timezone: {timezone}</p>}
             {adminArea && <p>Admin Area: {adminArea}</p>}

@@ -1,13 +1,18 @@
+import { useDispatch, useSelector } from "react-redux";
+import content from "../../content";
 //Styles
-import { useContext } from "react";
-import SearchContext from "../../context/SearchContext";
 import { Wrapper } from "./Search.styles";
 
 const Search = () => {
-  const { setSearch, searchError, search } = useContext(SearchContext);
+  const dispatch = useDispatch();
+  const search = useSelector((state) => content.selectors.selectSearch(state));
+  const searchError = useSelector((state) =>
+    content.selectors.selectSearchError(state)
+  );
   const setSearchValue = (e) => {
-    setSearch(e.target.value);
+    dispatch(content.actions.setSearch(e.target.value));
   };
+
   return (
     <Wrapper>
       <form

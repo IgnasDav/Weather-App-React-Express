@@ -14,10 +14,9 @@ Decision log:
 React was used for the UI off the app, it is nice divide the app into smaller, reusable components.
 https://reactjs.org/docs/getting-started.html - Documentation for React 
 002.
-React context was used for global state management, as I found the app/data to be not big enough for redux.
-It also saved memory because React-context is already included into the react library. And implementing other state management libraries would require to install them. 
-If the app grows into a bigger project it will not be hard enough to migrate from React-context to redux.
-https://reactjs.org/docs/context.html - Context documentation
+Redux was used for global state management, tried it with react context, but with @redux/toolkit and redux-react, after refactoring the code into redux state management
+It is more readable and easier to understand.
+https://redux.js.org/ - Redux documentation
 003.
 Lodash was used for checking if the data was the same to discourage the app from useless re-renders.
 https://lodash.com/docs/4.17.15 - Lodash documentation 
